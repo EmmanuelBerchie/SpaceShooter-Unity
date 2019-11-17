@@ -50,6 +50,9 @@ public class EnemyScript : MonoBehaviour
                 rotate_Speed = Random.Range(rotate_Speed, rotate_Speed + 20f);
             }
         }
+        if (canShoot)
+            Invoke("StartShooting", Random.Range(1f, 3f));
+
     }
 
     void Move()
@@ -75,6 +78,15 @@ public class EnemyScript : MonoBehaviour
         {
             transform.Rotate(new Vector3(0f, 0f, rotate_Speed * Time.deltaTime), Space.World);
         }
+    }
+
+    void StartShooting()
+    {
+        GameObject bullet = Instantiate(bulletPrefab, attack_Point.position, Quaternion.identity);
+        bullet.GetComponent<BulletScript>().is_EnemyBullet = true;
+
+        if (canShoot)
+            Invoke("StartShooting", Random.Range(1f, 3f)); 
     }
 
 }// class
