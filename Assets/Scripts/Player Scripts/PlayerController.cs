@@ -14,11 +14,25 @@ public class PlayerController : MonoBehaviour
     private Transform attack_Point;
     public float attack_Timer = 0.35f;
     private float current_Attack_Timer;
-    private bool canAttack; 
+    private bool canAttack;
+    private AudioSource laserAudio;
+    private AudioSource explosionSound;
+    private Animator anim;
+
+    // cached object reference 
+    sceneLoader sceneloader;
+
+    void Awake()
+    {
+        laserAudio = GetComponent<AudioSource>();
+        //explosionSound = GetComponent<AudioSource>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         current_Attack_Timer = attack_Timer; 
+        sceneloader = FindObjectOfType<sceneLoader>();
     }
 
     // Update is called once per frame
@@ -74,13 +88,45 @@ public class PlayerController : MonoBehaviour
                 attack_Timer = 0f;
 
                 Instantiate(player_Bullet, attack_Point.position, Quaternion.identity);
-                
-                // play the sound FX 
+                laserAudio.Play();
             }
         }
 
     
     }// attack 
+
+    void TurnOffGameObject()
+    {
+        gameObject.SetActive(false);
+    }
+    void OnTriggerEnter2D(Collider2D target)
+    {
+        if (target.tag == "Bullet")
+        {
+            //canMove = false;
+
+          //  if (canShoot)
+            //{
+             //   canShoot = false;
+             //   CancelInvoke("StartShooting");
+           // }
+           
+            Invoke("TurnOffGameObject", 1f);
+            GetComponent<sceneLoader>().LoadNextScene();
+            // anim.Play("Destroy");
+            // explosionSound.Play();
+
+        }
+    }
+    void EndMenu()
+    {
+        if (!gameObject)
+        {
+            //Application.Quit();
+           
+        }
+    }
+
 }
 
 //class

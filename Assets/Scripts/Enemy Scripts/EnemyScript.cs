@@ -19,12 +19,15 @@ public class EnemyScript : MonoBehaviour
     public GameObject bulletPrefab;
 
     private Animator anim;
-    private AudioSource explosionSound; 
+    private AudioSource explosionSound;
+    Score score; 
 
     void Awake()
     {
         anim = GetComponent<Animator>();
         explosionSound = GetComponent<AudioSource>();
+        score = GetComponent<Score>();
+
 
     }
 
@@ -88,5 +91,26 @@ public class EnemyScript : MonoBehaviour
         if (canShoot)
             Invoke("StartShooting", Random.Range(1f, 3f)); 
     }
+    void TurnOffGameObject()
+    {
+        gameObject.SetActive(false);
+    }
+     void OnTriggerEnter2D(Collider2D target)
+    {
+        if(target.tag == "Bullet")
+        {
+            canMove = false;
+          
+            if (canShoot)
+            {
+                canShoot = false;
+                CancelInvoke("StartShooting");
+            }
+            Invoke("TurnOffGameObject", 1f);
+            anim.Play("Destroy");
+            explosionSound.Play();
+            FindObjectOfType<Score>().AddScore(); 
 
+        }
+    }
 }// class

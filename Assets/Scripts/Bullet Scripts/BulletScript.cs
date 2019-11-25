@@ -38,4 +38,13 @@ public class BulletScript : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    void OnTriggerEnter2D(Collider2D target)
+    {
+       if(target.tag == "Bullet" || target.tag == "Enemy" || target.tag == "Player") 
+        {
+            gameObject.SetActive(false); 
+        }
+           
+    }
 }
